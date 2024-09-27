@@ -16,23 +16,23 @@ args = parser.parse_args()
 hashmethod = 'sha256'
 if args.argument:               # change hashmethod if --argument given
     hashmethod = args.argument 
-passfile = args.passfile
-wordfile = args.wordfile    
+    
 
 namelist = []   #List of people's names
 passhash = []   #List of their hashed passwords
 wordlist = []   #wordlist.txt as a list in jill.py
 wordhash = []   #hashed passwords from wordlist
 output = ''   
+count = 0
 
 
-file = open(passfile, 'r')  #open file with lines formatted, name:hashedpassword
+file = open(args.passfile, 'r')  #open file with lines formatted, name:hashedpassword
 for line in file.readlines():   #looks through lines
     namelist.append(line.split(':')[0].strip()) #puts names into namelist
     passhash.append(line.split(':')[1].strip()) #puts hashedpasswords into passhash
 file.close()
 
-file = open(wordfile, 'r') #open file
+file = open(args.wordfile, 'r') #open file
 for line in file.readlines():   #look at lines
     sha = hashlib.new(hashmethod)   #determines hashing method
     line = line.strip()         #removes all extra blank spaces
@@ -40,8 +40,6 @@ for line in file.readlines():   #look at lines
     sha.update(line.encode())   #encodes to byte string
     wordhash.append(sha.hexdigest())    #
 file.close()
-
-count = 0
 
 
 #outputs name and cracked password
@@ -64,13 +62,9 @@ for line1, line2,  in zip(namelist, passhash):
 
     
     
-    
-    
-    
 print(output[:-1])  #output deleting the extra \n
 if args.verbose:
     if count != 1:    
         print(f'{count} passwords unable to be cracked')
     else:
-        print(f'{count} password unable to be cracked')
-    
+        print('1 password unable to be cracked')
